@@ -12,10 +12,12 @@ class KinovaBridge : public rclcpp::Node {
  public:
   KinovaBridge(ros::NodeHandle &nh)
       : rclcpp::Node("kinova_bridge", nh.getNamespace()),
-        arm_action_client_(nh, "arm_action_client", false),
+        arm_action_client_(
+            nh, nh.getNamespace() + "_driver/joints_action/joint_angles",
+            false),
         finger_action_client_(nh, "finger_action_client", false) {
     arm_action_client_.waitForServer();
-    finger_action_client_.waitForServer();
+    // finger_action_client_.waitForServer();
 
     arm_joint_sub_ = create_subscription<sensor_msgs::msg::JointState>(
         "kinova_arm_joint", 10,
@@ -29,7 +31,7 @@ class KinovaBridge : public rclcpp::Node {
         nh.advertise<kinova_msgs::JointVelocity>("in/joint_velocity", 10);
     arm_torque_pub_ =
         nh.advertise<kinova_msgs::JointTorque>("in/joint_torque", 10);
-    
+
     std::cout << "Initialized : " << nh.getNamespace() << std::endl;
   }
 
@@ -111,7 +113,7 @@ int main(int argc, char *argv[]) {
   ros1_spinner.start();
   try {
     rclcpp::spin(kinova_bridge);
-  } catch(...) {
+  } catch (...) {
     std::cout << "Terminate" << std::endl;
   }
   ros1_spinner.stop();
