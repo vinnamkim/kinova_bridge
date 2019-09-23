@@ -12,12 +12,20 @@ class KinovaBridge : public rclcpp::Node {
  public:
   KinovaBridge(ros::NodeHandle &nh)
       : rclcpp::Node("kinova_bridge", nh.getNamespace()),
-        arm_action_client_(
-            nh.getNamespace() + "/joints_action/joint_angles", 
-            true),
-        finger_action_client_(nh, "finger_action_client", true) {
-    arm_action_client_.waitForServer();
-    // finger_action_client_.waitForServer();
+        arm_action_client_(nh.getNamespace() + "/joints_action/joint_angles",
+                           true),
+        finger_action_client_(
+            nh.getNamespace() + "/fingers_action/finger_positions", true) {
+    const auto timeout = ros::Duration(2.0);
+
+    if (!arm_action_client_.waitForServer(timeout)) {
+      std::cout << "No response for arm_action server" << std::endl;
+      throw std::runtime_error("");
+    }
+    if (!finger_action_client_.waitForServer(timeout)) {
+      std::cout << "No response for finger_action server" << std::endl;
+      throw std::runtime_error("");
+    }
 
     arm_joint_sub_ = create_subscription<sensor_msgs::msg::JointState>(
         "kinova_arm_joint", 10,
