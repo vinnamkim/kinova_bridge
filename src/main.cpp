@@ -89,7 +89,7 @@ class KinovaBridge : public rclcpp::Node {
 };
 
 int main(int argc, char *argv[]) {
-  ros::init(argc, argv, "kinova_bridge");
+  ros::init(argc, argv, "kinova_bridge", ros::init_options::NoSigintHandler);
   rclcpp::init(argc, argv);
   if (argc != 2) {
     std::cout << "Run by kinova_bridge ${robot_name}" << std::endl;
@@ -104,8 +104,13 @@ int main(int argc, char *argv[]) {
 
   ros::AsyncSpinner ros1_spinner(1);
   ros1_spinner.start();
-  rclcpp::spin(kinova_bridge);
+  try {
+    rclcpp::spin(kinova_bridge);
+  } catch(...) {
+    std::cout << "Terminate" << std::endl;
+  }
   ros1_spinner.stop();
   ros::shutdown();
+  rclcpp::shutdown();
   return 1;
 }
