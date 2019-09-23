@@ -13,9 +13,9 @@ class KinovaBridge : public rclcpp::Node {
   KinovaBridge(ros::NodeHandle &nh)
       : rclcpp::Node("kinova_bridge", nh.getNamespace()),
         arm_action_client_(
-            nh, nh.getNamespace() + "_driver/joints_action/joint_angles",
-            false),
-        finger_action_client_(nh, "finger_action_client", false) {
+            nh.getNamespace() + "/joints_action/joint_angles", 
+            true),
+        finger_action_client_(nh, "finger_action_client", true) {
     arm_action_client_.waitForServer();
     // finger_action_client_.waitForServer();
 
