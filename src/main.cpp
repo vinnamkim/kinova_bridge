@@ -88,7 +88,7 @@ class KinovaBridge : public rclcpp::Node {
   ros::Publisher arm_torque_pub_;
 };
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
   ros::init(argc, argv, "kinova_bridge");
   rclcpp::init(argc, argv);
   if (argc != 2) {
@@ -96,7 +96,8 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  std::string ns(argv[2]);
+  std::string ns(argv[1]);
+  ns = ns + "_driver";
   ros::NodeHandle nh(ns);
 
   KinovaBridge::SharedPtr kinova_bridge = std::make_shared<KinovaBridge>(nh);
