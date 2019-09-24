@@ -104,14 +104,15 @@ class KinovaBridge : public rclcpp::Node {
 };
 
 int main(int argc, char *argv[]) {
-  ros::init(argc, argv, "kinova_bridge", ros::init_options::NoSigintHandler);
-  rclcpp::init(argc, argv);
   if (argc != 2) {
     std::cout << "Run by kinova_bridge ${robot_name}" << std::endl;
     return 0;
   }
 
   std::string ns(argv[1]);
+  ros::init(argc, argv, "kinova_bridge_" + ns,
+            ros::init_options::NoSigintHandler);
+  rclcpp::init(argc, argv);
   ns = ns + "_driver";
   ros::NodeHandle nh(ns);
 
