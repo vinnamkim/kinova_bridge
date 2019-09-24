@@ -29,8 +29,8 @@ def main(args=None):
 
     node = rclpy.create_node('minimal_publisher')
 
-    publisher_right = node.create_publisher(JointState, '/right_driver/kinova_arm_joint', 10)
-    publisher_left = node.create_publisher(JointState, '/left_driver/kinova_arm_joint', 10)
+    publisher_arm_right = node.create_publisher(JointState, '/right_driver/kinova_arm_joint', 10)
+    publisher_arm_left = node.create_publisher(JointState, '/left_driver/kinova_arm_joint', 10)
     publisher_finger_right = node.create_publisher(JointState, '/right_driver/kinova_finger_joint', 10)
     publisher_finger_left = node.create_publisher(JointState, '/left_driver/kinova_finger_joint', 10)
 
@@ -57,8 +57,8 @@ def main(args=None):
         i += 1
         #node.get_logger().info('Publishing: "%s"' % msg.velocity)
         node.get_logger().info('Publishing: "%s"' % msg.position)
-        #publisher_right.publish(msg)
-        #publisher_left.publish(msg)
+        #publisher_arm_right.publish(msg)
+        #publisher_arm_left.publish(msg)
         sleep(0.5)  # seconds
 
     # Destroy the node explicitly
